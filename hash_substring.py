@@ -9,20 +9,36 @@ def read_input():
     if 'F' in input_text:
         input_file = input()
         input_file = "tests/" + input_file
-        if 'a' not in input_file:
+        if 'a' in input_file:
             try:
                 with open(input_file, "r") as f:
-                    pattern = f.readline()
-                    text = f.readline()
+                    expected_output = f.read().strip()
+                    return None, expected_output
+
+            except FileNotFoundError:
+                return print("File not found error")
+
+        else:
+            try:
+                with open(input_file, "r") as f:
+                    pattern = f.readline().strip()
+                    text = f.readline().strip()
                     return pattern, text
 
             except FileNotFoundError:
-                return print("File_not_found_error")
+                return print("File not found error")
 
     if 'I' in input_text:
         pattern = input()
         text = input()
         return pattern, text
+
+
+
+    
+
+
+
 
 
 
