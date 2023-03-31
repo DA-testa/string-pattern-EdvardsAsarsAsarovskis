@@ -5,19 +5,24 @@ import sys
 import sys
 
 def read_input():
-    choice = input("Input choice I or F (for input from keyboard or from file): ")
-    if choice == "I":
-        text = input("Enter the text string: ")
-        pattern = input("Enter the pattern string: ")
-        return text, pattern
-    elif choice == "F":
-        with open("tests/06", "r") as file1, open("tests/06.a", "r") as file2:
-            text = file1.read().strip()
-            pattern = file2.read().strip()
-            return text, pattern
-    else:
-        print("Invalid choice")
-        return None
+    input_text = input()
+    if 'F' in input_text:
+        input_file = input()
+        input_file = "tests/" + input_file
+        if 'a' not in input_file:
+            try:
+                with open(input_file, "r") as f:
+                    pattern = f.readline()
+                    text = f.readline()
+                    return pattern, text
+
+            except FileNotFoundError:
+                return print("File_not_found_error")
+
+    if 'I' in input_text:
+        pattern = input()
+        text = input()
+        return pattern, text
 
 
 
