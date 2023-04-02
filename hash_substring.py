@@ -1,48 +1,29 @@
 # python3
 
-import sys
+
 
 import sys
+
+import os
 
 def read_input():
-    input_text = input()
-    if 'F' in input_text:
-        input_file = input()
+    input_format = input().upper().rstrip()
+    if 'F' in input_format:
+        input_file = '06'
         input_file = "tests/" + input_file
-        if 'a' in input_file:
+        if 'a' not in input_file:
             try:
                 with open(input_file, "r") as f:
-                    expected_output = f.read().strip()
-                    return None, expected_output
-
+                    pattern = f.readline().rstrip()
+                    text = f.readline().rstrip()
             except FileNotFoundError:
-                return print("File not found error")
+                return "File not found error"
 
-        else:
-            try:
-                with open(input_file, "r") as f:
-                    pattern = f.readline().strip()
-                    text = f.readline().strip()
-                    return pattern, text
+    elif input_format == 'I':
+        pattern = input().rstrip()
+        text = input().rstrip()
 
-            except FileNotFoundError:
-                return print("File not found error")
-
-    if 'I' in input_text:
-        pattern = input()
-        text = input()
-        return pattern, text
-
-
-
-    
-
-
-
-
-
-
-
+    return pattern, text
 
 
 def print_occurrences(output):
