@@ -1,3 +1,4 @@
+# Edvards Asars Asarovskis 17.grupa
 # python3
 
 
