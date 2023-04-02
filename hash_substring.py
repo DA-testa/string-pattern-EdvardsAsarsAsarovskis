@@ -1,32 +1,74 @@
+# Edvards Asars Asarovskis 17.grupa
 # python3
 
+
+
+import sys
+
+import os
+
 def read_input():
-    # this function needs to aquire input both from keyboard and file
-    # as before, use capital i (input from keyboard) and capital f (input from file) to choose which input type will follow
-    
-    
-    # after input type choice
-    # read two lines 
-    # first line is pattern 
-    # second line is text in which to look for pattern 
-    
-    # return both lines in one return
-    
-    # this is the sample return, notice the rstrip function
-    return (input().rstrip(), input().rstrip())
+    input_format = input().upper().rstrip()
+    if 'F' in input_format:
+        input_file = '06'
+        input_file = "tests/" + input_file
+        if 'a' not in input_file:
+            try:
+                with open(input_file, "r") as f:
+                    pattern = f.readline().rstrip()
+                    text = f.readline().rstrip()
+            except FileNotFoundError:
+                return "File not found error"
+
+    elif input_format == 'I':
+        pattern = input().rstrip()
+        text = input().rstrip()
+
+    return pattern, text
+
 
 def print_occurrences(output):
-    # this function should control output, it doesn't need any return
+    """
+    Prints the list of occurrences in the required format.
+    """
     print(' '.join(map(str, output)))
 
-def get_occurrences(pattern, text):
-    # this function should find the occurances using Rabin Karp alghoritm 
+def rabin_karp(pattern, text):
+    """
+    Rabin-Karp algorithm for searching pattern in text.
+    Returns a list of starting indices of matches found in text.
+    """
+    # Set prime number and modulus for hashing function
+    prime = 101
+    modulus = 2**32
+    
+    n = len(text)
+    m = len(pattern)
+    
+    # Calculate hash values for pattern and first substring of text
+    pattern_hash = 0
+    substring_hash = 0
+    for i in range(m):
+        pattern_hash = (pattern_hash * prime + ord(pattern[i])) % modulus
+        substring_hash = (substring_hash * prime + ord(text[i])) % modulus
+    
+    # Check if pattern matches first substring of text
+    indices = []
+    if pattern_hash == substring_hash and pattern == text[:m]:
+        indices.append(0)
+    
+    # Calculate hash values for remaining substrings of text and compare with pattern hash
+    for i in range(m, n):
+        substring_hash = (substring_hash * prime - ord(text[i-m]) * pow(prime, m, modulus) % modulus + ord(text[i])) % modulus
+        if pattern_hash == substring_hash and pattern == text[i-m+1:i+1]:
+            indices.append(i-m+1)
+    
+    return indices
 
-    # and return an iterable variable
-    return [0]
 
 
 # this part launches the functions
 if __name__ == '__main__':
-    print_occurrences(get_occurrences(*read_input()))
-
+    pattern, text = read_input()
+    occurrences = rabin_karp(pattern, text)
+    print_occurrences(occurrences)
